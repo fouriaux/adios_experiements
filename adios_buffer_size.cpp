@@ -77,32 +77,34 @@ void initBuffer (int*& buffer) {
 }
 
 int main (int argc, char** argv) {
-  if (argc != 5) {
-    std::cerr << "usage: " << argv[0] << " <nb bytes per write per rank> <ADIOS buffer size> <transport method> <nb writes per rank>" << std::endl;
+  if (argc != 6) {
+    std::cerr << "usage: " << argv[0] << " <nb bytes per write per rank> <ADIOS buffer size> <transport method> <nb writes per rank> <output filename>" << std::endl;
     return -1;
   }
+
   total_size      = 0;
   buffer          = NULL;
   batch_size      = atoi(argv[1]);
   max_buffer_size = atoi(argv[2]);
   method          = argv[3];
   nb_batchs       = atoi(argv[4]);
+  out_file        = argv[5];
 
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(comm, &rank);
   MPI_Comm_size(comm, &nb_ranks);
   initAdios(method, max_buffer_size);
-  
+
   total_size = batch_size * nb_ranks * nb_batchs;
-  initBuffer (&buffer);
+  initBuffer (buffer);
   open (out_file);
 
   MPI_Barrier (MPI_COMM_WORLD);
   start_time();
 
   write (buffer);
-  close();
   MPI_Barrier (MPI_COMM_WORLD);
+  close();
 
   stop_time(rank, batch_size, nb_batchs);
   adios_finalize(rank);

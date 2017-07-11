@@ -1,0 +1,33 @@
+fouriaux@bbpbg2 build_blue]$ srun -n 4 ./adios_buffer_size 8 4 MPI 2 ./report.bbp
+ADIOS time: 0.043815 Size: 8, Nb writes: 2 
+[fouriaux@bbpbg2 build_blue]$ bpls --dump report.bbp
+  integer  global_size  scalar
+64 
+
+  integer  batch_size   scalar
+8 
+
+  integer  offset       scalar
+0 
+
+  integer  data         {64}
+    ( 0)    0 0 0 0 0 0
+    ( 6)    0 0 1 1 1 1
+    (12)    1 1 1 1 2 2
+    (18)    2 2 2 2 2 2
+    (24)    3 3 3 3 3 3
+    (30)    3 3 0 0 0 0
+    (36)    0 0 0 0 1 1
+    (42)    1 1 1 1 1 1
+    (48)    2 2 2 2 2 2
+    (54)    2 2 3 3 3 3
+    (60)    3 3 3 3 
+
+[fouriaux@bbpbg2 build_blue]$ srun -n 4 ./adios_buffer_size 8 4 MPI 2 ./report.bbp
+ADIOS time: 0.041631 Size: 8, Nb writes: 2 
+[fouriaux@bbpbg2 build_blue]$ srun -n 4 ./adios_buffer_size 8 4 MPI_Aggregate 2 ./report.bbp
+ADIOS time: 0.011986 Size: 8, Nb writes: 2 
+[fouriaux@bbpbg2 build_blue]$ srun -n 4 ./adios_buffer_size 8 4 MPI_BGQ 2 ./report.bbp
+2017-07-11 18:11:39.234 (WARN ) [0x40000f79540] 824577:ibm.runjob.client.Job: terminated by signal 11
+2017-07-11 18:11:39.234 (WARN ) [0x40000f79540] 824577:ibm.runjob.client.Job: abnormal termination by signal 11 from rank 0
+
